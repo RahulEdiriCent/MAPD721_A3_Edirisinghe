@@ -59,6 +59,8 @@ import com.example.mapd721_a3_edirisinghe.ui.theme.MAPD721_A3_EdirisingheTheme
 //https://developer.android.com/reference/kotlin/androidx/compose/animation/core/InfiniteTransition
 //https://developer.android.com/jetpack/compose/graphics/draw/shapes
 //https://developer.android.com/jetpack/compose/animation/value-based#animate-as-state
+//https://www.youtube.com/watch?v=6ZZDPILtYlA
+////https://developer.android.com/codelabs/basic-android-kotlin-compose-add-images#2
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -192,6 +194,7 @@ fun AnimationSelection(navigationController: NavController, purpleColor: Color){
 @Composable
 fun TransitionAnimationDisplay(navigationController: NavController, purpleColor: Color) {
     var enabled by remember { mutableStateOf(true) }
+    val image = painterResource(R.drawable.vector_rocket_launch_in_the_clouds)
 
     val alpha: Float by animateFloatAsState(
         if (enabled) 1f else 0.5f,
@@ -250,12 +253,17 @@ fun TransitionAnimationDisplay(navigationController: NavController, purpleColor:
         ){
             Box(
                 Modifier
-                    .height(110.dp * alpha)
-                    .width(110.dp * alpha)
+                    .height(135.dp * alpha)
+                    .width(135.dp * alpha)
                     .offset(y = 500.dp * alpha * alpha * alpha)
                     //.graphicsLayer(alpha = alpha)
-                    .background(Color.Red)
-            )
+                    //.background(Color.Red)
+            ){
+                Image(
+                    painter = image,
+                    contentDescription = null
+                )
+            }
         }
     }
 }
@@ -294,7 +302,7 @@ fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Colo
                 )
             }
         }
-        Spacer(modifier= Modifier.height(10.dp))
+        Spacer(modifier= Modifier.height(40.dp))
         Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Button(
                 modifier = Modifier
@@ -333,6 +341,7 @@ fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Colo
 @Composable
 fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: Color) {
     val infiniteTransition = rememberInfiniteTransition(label = "1")
+    val image = painterResource(R.drawable.butterfly_image)
 
     val colorShift by infiniteTransition.animateColor(
         initialValue = Color.Red,
@@ -397,14 +406,19 @@ fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: C
                     .height(150.dp)
                     .width(150.dp)
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             Box(
                 modifier = Modifier
                     .scale(sizeMod)
                     .height(200.dp)
                     .width(200.dp)
-                    .background(Color.Blue)
-            )
+                    //.background(Color.Blue)
+            ){
+                Image(
+                    painter = image,
+                    contentDescription = null
+                )
+            }
         }
     }
 }
@@ -430,7 +444,7 @@ fun EnterExitAnimationDisplay(navigationController: NavController, purpleColor: 
                 Spacer(modifier = Modifier.width(20.dp))
                 Text(
                     modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                    text = "EnterExit Animation",
+                    text = "Enter-Exit Animation",
                     color = Color.White
                 )
             }
