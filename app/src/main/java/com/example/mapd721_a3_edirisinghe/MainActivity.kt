@@ -3,6 +3,13 @@ package com.example.mapd721_a3_edirisinghe
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,10 +26,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.graphics.shapes.RoundedPolygon
+import androidx.graphics.shapes.toPath
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,6 +45,8 @@ import com.example.mapd721_a3_edirisinghe.ui.theme.MAPD721_A3_EdirisingheTheme
 //References:
 //https://stackoverflow.com/questions/70142043/how-to-navigate-from-a-screen-to-another-in-jetpack-compose-using-navcontroller
 //https://stackoverflow.com/questions/60247480/color-from-hex-string-in-jetpack-compose
+//https://developer.android.com/reference/kotlin/androidx/compose/animation/core/InfiniteTransition
+//https://developer.android.com/jetpack/compose/graphics/draw/shapes
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,112 +93,117 @@ fun GreetingPreview() {
 fun AnimationSelection(navigationController: NavController, purpleColor: Color){
     Column(modifier = Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.height(140.dp))
-        Button(
-            modifier = Modifier
-                .height(60.dp)
-                .padding(
-                    start = 20.dp, end = 20.dp
-                ),
-            onClick = {
-                navigationController.navigate("transitionAnimation")
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
-            border = ButtonDefaults.outlinedButtonBorder
+        Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Button(
+                modifier = Modifier
+                    .height(60.dp)
+                    .padding(
+                        start = 20.dp, end = 20.dp
+                    ),
+                onClick = {
+                    navigationController.navigate("transitionAnimation")
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
+                border = ButtonDefaults.outlinedButtonBorder
 
-        ) {
-            Text(
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                text = "Transition Animation",
-                color = Color.White
-            )
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Button(
-            modifier = Modifier
-                .height(60.dp)
-                .padding(
-                    start = 20.dp, end = 20.dp
-                ),
-            onClick = {
-                navigationController.navigate("scaleAnimation")
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
-            border = ButtonDefaults.outlinedButtonBorder
+            ) {
+                Text(
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+                    text = "= Transition Animation =",
+                    color = Color.White
+                )
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(
+                modifier = Modifier
+                    .height(60.dp)
+                    .padding(
+                        start = 20.dp, end = 20.dp
+                    ),
+                onClick = {
+                    navigationController.navigate("scaleAnimation")
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
+                border = ButtonDefaults.outlinedButtonBorder
 
-        ) {
-            Text(
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                text = "Scale Animation",
-                color = Color.White
-            )
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Button(
-            modifier = Modifier
-                .height(60.dp)
-                .padding(
-                    start = 20.dp, end = 20.dp
-                ),
-            onClick = {
-                navigationController.navigate("infiniteAnimation")
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
-            border = ButtonDefaults.outlinedButtonBorder
+            ) {
+                Text(
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+                    text = "= Scale Animation =",
+                    color = Color.White
+                )
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(
+                modifier = Modifier
+                    .height(60.dp)
+                    .padding(
+                        start = 20.dp, end = 20.dp
+                    ),
+                onClick = {
+                    navigationController.navigate("infiniteAnimation")
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
+                border = ButtonDefaults.outlinedButtonBorder
 
-        ) {
-            Text(
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                text = "Infinite Animation",
-                color = Color.White
-            )
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Button(
-            modifier = Modifier
-                .height(60.dp)
-                .padding(
-                    start = 20.dp, end = 20.dp
-                ),
-            onClick = {
-                navigationController.navigate("enterExitAnimation")
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
-            border = ButtonDefaults.outlinedButtonBorder
+            ) {
+                Text(
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+                    text = "= Infinite Animation =",
+                    color = Color.White
+                )
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(
+                modifier = Modifier
+                    .height(60.dp)
+                    .padding(
+                        start = 20.dp, end = 20.dp
+                    ),
+                onClick = {
+                    navigationController.navigate("enterExitAnimation")
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
+                border = ButtonDefaults.outlinedButtonBorder
 
-        ) {
-            Text(
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                text = "Enter-Exit Animation",
-                color = Color.White
-            )
+            ) {
+                Text(
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+                    text = "= Enter-Exit Animation =",
+                    color = Color.White
+                )
+            }
         }
     }
 }
 
 @Composable
 fun TransitionAnimationDisplay(navigationController: NavController, purpleColor: Color) {
-    Button(
-        modifier = Modifier
-            //.fillMaxSize()
-            .height(60.dp)
-            .padding(
-                start = 20.dp, end = 20.dp
-            ),
-        onClick = {
-            navigationController.navigate("animationSelection")
-        },
-        colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
-        border = ButtonDefaults.outlinedButtonBorder
 
-    ) {
-        Row {
-            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-            Spacer(modifier = Modifier.width(20.dp))
-            Text(
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                text = "Transition Animation",
-                color = Color.White
-            )
+    Column(modifier = Modifier.fillMaxSize()){
+        Button(
+            modifier = Modifier
+                //.fillMaxSize()
+                .height(60.dp)
+                .padding(
+                    start = 20.dp, end = 20.dp
+                ),
+            onClick = {
+                navigationController.navigate("animationSelection")
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
+            border = ButtonDefaults.outlinedButtonBorder
+
+        ) {
+            Row {
+                Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                Spacer(modifier = Modifier.width(20.dp))
+                Text(
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+                    text = "Transition Animation",
+                    color = Color.White
+                )
+            }
         }
     }
 }
@@ -218,28 +238,59 @@ fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Colo
 
 @Composable
 fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: Color) {
-    Button(
-        modifier = Modifier
-            .height(60.dp)
-            .padding(
-                start = 20.dp, end = 20.dp
-            ),
-        onClick = {
-            navigationController.navigate("animationSelection")
-        },
-        colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
-        border = ButtonDefaults.outlinedButtonBorder
+    val infiniteTransition = rememberInfiniteTransition(label = "1")
 
-    ) {
-        Row {
-            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-            Spacer(modifier = Modifier.width(20.dp))
-            Text(
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                text = "Infinite Animation",
-                color = Color.White
-            )
+    val colorShift by infiniteTransition.animateColor(
+        initialValue = Color.Red,
+        targetValue = Color.Green,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ), label = "2"
+    )
+    Column(modifier = Modifier.fillMaxSize()) {
+        Button(
+            modifier = Modifier
+                .height(60.dp)
+                .padding(
+                    start = 20.dp, end = 20.dp
+                ),
+            onClick = {
+                navigationController.navigate("animationSelection")
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
+            border = ButtonDefaults.outlinedButtonBorder
+
+        ) {
+            Row {
+                Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                Spacer(modifier = Modifier.width(20.dp))
+                Text(
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+                    text = "Infinite Animation",
+                    color = Color.White
+                )
+            }
         }
+        Spacer(modifier = Modifier.height(50.dp))
+        Box(
+            modifier = Modifier
+                .drawWithCache {
+                    val roundedPolygon = RoundedPolygon(
+                        numVertices = 6,
+                        radius = size.minDimension / 2,
+                        centerX = size.width / 2,
+                        centerY = size.height / 2
+                    )
+                    val roundedPolygonPath = roundedPolygon
+                        .toPath()
+                        .asComposePath()
+                    onDrawBehind {
+                        drawPath(roundedPolygonPath, color = colorShift)
+                    }
+                }
+                .fillMaxSize()
+        )
     }
 }
 
