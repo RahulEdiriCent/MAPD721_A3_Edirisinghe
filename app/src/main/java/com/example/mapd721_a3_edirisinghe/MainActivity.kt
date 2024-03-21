@@ -342,8 +342,8 @@ fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: C
     )
 
     val sizeMod by infiniteTransition.animateFloat(
-        initialValue = 80F,
-        targetValue = 120F,
+        initialValue = 0.8F,
+        targetValue = 1.2F,
         animationSpec = infiniteRepeatable(
             animation = tween(1000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
@@ -398,8 +398,8 @@ fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: C
             Spacer(modifier = Modifier.height(10.dp))
             Box(
                 modifier = Modifier
-                    .height(20.dp * sizeMod)
-                    .width(20.dp * sizeMod)
+                    .height(200.dp * sizeMod)
+                    .width(200.dp * sizeMod)
                     .background(Color.Blue)
             )
         }
