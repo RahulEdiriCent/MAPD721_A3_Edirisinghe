@@ -3,6 +3,7 @@ package com.example.mapd721_a3_edirisinghe
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -11,6 +12,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -60,7 +63,8 @@ import com.example.mapd721_a3_edirisinghe.ui.theme.MAPD721_A3_EdirisingheTheme
 //https://developer.android.com/jetpack/compose/graphics/draw/shapes
 //https://developer.android.com/jetpack/compose/animation/value-based#animate-as-state
 //https://www.youtube.com/watch?v=6ZZDPILtYlA
-////https://developer.android.com/codelabs/basic-android-kotlin-compose-add-images#2
+//https://developer.android.com/codelabs/basic-android-kotlin-compose-add-images#2
+//https://stackoverflow.com/questions/67376429/how-to-achieve-slide-in-and-out-animation-in-android-compose-between-two-views-s
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -344,7 +348,7 @@ fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: C
     val image = painterResource(R.drawable.butterfly_image)
 
     val colorShift by infiniteTransition.animateColor(
-        initialValue = Color.Red,
+        initialValue = Color.Cyan,
         targetValue = Color.Green,
         animationSpec = infiniteRepeatable(
             animation = tween(1000, easing = LinearEasing),
@@ -425,7 +429,9 @@ fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: C
 
 @Composable
 fun EnterExitAnimationDisplay(navigationController: NavController, purpleColor: Color) {
-    Column() {
+    var isOffScreen by remember { mutableStateOf(false) }
+
+    Column(modifier = Modifier.fillMaxSize()) {
         Button(
             modifier = Modifier
                 .height(60.dp)
@@ -448,6 +454,70 @@ fun EnterExitAnimationDisplay(navigationController: NavController, purpleColor: 
                     color = Color.White
                 )
             }
+        }
+        Spacer(modifier= Modifier.height(20.dp))
+        Button(
+            modifier = Modifier
+                //.fillMaxSize()
+                .height(60.dp)
+                .padding(
+                    end = 20.dp
+                ),
+            //.offset(y = 1.dp * movement),
+            onClick = {
+                isOffScreen = !isOffScreen
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
+            border = ButtonDefaults.outlinedButtonBorder
+        ) {
+            Text(
+                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+                text = "Activate Animation",
+                color = Color.White
+            )
+        }
+        Spacer(modifier= Modifier.height(20.dp))
+        AnimatedVisibility(
+            isOffScreen,
+            modifier = Modifier
+                .height(200.dp)
+                .width(200.dp),
+
+            enter = slideInHorizontally(
+                initialOffsetX = {it},
+                animationSpec = tween(
+                    durationMillis = 2500,
+                    easing = LinearEasing
+                )
+            ),
+            exit = slideOutHorizontally(
+                targetOffsetX = {it},
+                animationSpec = tween(
+                    durationMillis = 2000,
+                    easing = LinearEasing
+                )
+            )
+        ) {
+            Box(
+                modifier = Modifier
+                    .drawWithCache {
+                        val roundedPolygon = RoundedPolygon(
+                            numVertices = 6,
+                            radius = size.minDimension / 2,
+                            centerX = size.width / 2,
+                            centerY = size.height / 2
+                        )
+                        val roundedPolygonPath = roundedPolygon
+                            .toPath()
+                            .asComposePath()
+                        onDrawBehind {
+                            drawPath(roundedPolygonPath, color = Color.Cyan)
+                        }
+                    }
+                    .height(150.dp)
+                    .width(150.dp).height(150.dp)
+                    .width(150.dp)
+            )
         }
     }
 }
