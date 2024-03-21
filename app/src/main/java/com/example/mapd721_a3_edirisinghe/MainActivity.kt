@@ -225,6 +225,7 @@ fun TransitionAnimationDisplay(navigationController: NavController, purpleColor:
         Spacer(modifier= Modifier.height(10.dp))
         Button(
             modifier = Modifier
+                .offset(y = 70.dp * alpha * alpha)
                 .height(60.dp)
                 .padding(
                     start = 20.dp, end = 20.dp
@@ -238,7 +239,7 @@ fun TransitionAnimationDisplay(navigationController: NavController, purpleColor:
 
             Text(
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                text = "Launch Rocket",
+                text = if (enabled) "Launch Rocket" else "Land Rocket",
                 color = Color.White
             )
         }
@@ -248,9 +249,9 @@ fun TransitionAnimationDisplay(navigationController: NavController, purpleColor:
         ){
             Box(
                 Modifier
-                    .height(110.dp)
-                    .width(110.dp)
-                    .offset(y = 200.dp * alpha)
+                    .height(110.dp * alpha)
+                    .width(110.dp * alpha)
+                    .offset(y = 500.dp * alpha * alpha * alpha)
                     //.graphicsLayer(alpha = alpha)
                     .background(Color.Red)
             )
