@@ -298,8 +298,9 @@ fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Colo
         Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Button(
                 modifier = Modifier
-                    .height(60.dp / alpha)
-                    .width(220.dp / alpha)
+                    .scale(1/alpha)
+                    .height(60.dp)
+                    .width(220.dp)
                     .padding(
                         start = 5.dp, end = 5.dp
                     ),
@@ -319,8 +320,9 @@ fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Colo
             Spacer(modifier= Modifier.height(30.dp))
             Box(
                 Modifier
-                    .height(70.dp * alpha)
-                    .width(70.dp * alpha)
+                    .scale(alpha)
+                    .height(70.dp)
+                    .width(70.dp)
                     .graphicsLayer(alpha = alpha)
                     .background(Color.Red)
             )
