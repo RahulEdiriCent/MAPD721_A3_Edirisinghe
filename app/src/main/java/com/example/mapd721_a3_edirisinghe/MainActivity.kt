@@ -224,6 +224,7 @@ fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Colo
         if (enabled) 1f else 0.5f,
         animationSpec = tween(durationMillis = 1200, easing = LinearEasing),
         label = "3")
+
     Column(modifier = Modifier.fillMaxSize()) {
         Button(
             modifier = Modifier
@@ -253,8 +254,8 @@ fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Colo
         Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Button(
                 modifier = Modifier
-                    .height(60.dp)
-                    .width(220.dp)
+                    .height(60.dp / alpha)
+                    .width(220.dp / alpha)
                     .padding(
                         start = 5.dp, end = 5.dp
                     ),
@@ -274,8 +275,8 @@ fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Colo
             Spacer(modifier= Modifier.height(30.dp))
             Box(
                 Modifier
-                    .height(70.dp)
-                    .width(70.dp)
+                    .height(70.dp * alpha)
+                    .width(70.dp * alpha)
                     .graphicsLayer(alpha = alpha)
                     .background(Color.Red)
             )
