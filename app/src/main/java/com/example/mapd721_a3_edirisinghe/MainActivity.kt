@@ -398,8 +398,9 @@ fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: C
             Spacer(modifier = Modifier.height(10.dp))
             Box(
                 modifier = Modifier
-                    .height(200.dp * sizeMod)
-                    .width(200.dp * sizeMod)
+                    .scale(sizeMod)
+                    .height(200.dp)
+                    .width(200.dp)
                     .background(Color.Blue)
             )
         }
