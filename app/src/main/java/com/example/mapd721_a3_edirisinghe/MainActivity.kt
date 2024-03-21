@@ -17,7 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.mapd721_a3_edirisinghe.ui.theme.MAPD721_A3_EdirisingheTheme
+
+//References:
+//https://stackoverflow.com/questions/70142043/how-to-navigate-from-a-screen-to-another-in-jetpack-compose-using-navcontroller
 
 
 class MainActivity : ComponentActivity() {
@@ -30,14 +37,26 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //Greeting("Android")
-                    AnimationDisplay()
+                    AnimationSelection()
                 }
             }
         }
     }
 }
 
+@Composable
+fun StartApp(){
+    val navigationController = rememberNavController()
+    val purple = Color(0xFF5922dd)
+
+    NavHost(navigationController, startDestination = "animationSelection") {
+        composable("animationSelection") { AnimationSelection(navigationController = navigationController) }
+        composable("transitionAnimation") { TransitionAnimationDisplay(navigationController = navigationController) }
+        composable("scaleAnimation") { ScaleAnimationDisplay(navigationController = navigationController) }
+        composable("infiniteAnimation") { InfiniteAnimationDisplay(navigationController = navigationController) }
+        composable("enterExitAnimation") { EnterExitAnimationDisplay(navigationController = navigationController) }
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
@@ -48,7 +67,7 @@ fun GreetingPreview() {
 }
 
 @Composable
-fun AnimationDisplay(){
+fun AnimationSelection(navigationController: NavController){
     Column() {
         Button(
             modifier = Modifier
@@ -122,5 +141,93 @@ fun AnimationDisplay(){
                 color = Color.Black
             )
         }
+    }
+}
+
+@Composable
+fun TransitionAnimationDisplay(navController: NavController) {
+    Button(
+        modifier = Modifier
+            //.fillMaxSize()
+            .height(60.dp)
+            .padding(
+                start = 20.dp, end = 20.dp
+            ),
+        onClick = {
+
+        }, colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow),
+        border = ButtonDefaults.outlinedButtonBorder
+    ) {
+        Text(
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+            text = "<- Transition Animation",
+            color = Color.Black
+        )
+    }
+}
+
+@Composable
+fun ScaleAnimationDisplay(navController: NavController) {
+    Button(
+        modifier = Modifier
+            //.fillMaxSize()
+            .height(60.dp)
+            .padding(
+                start = 20.dp, end = 20.dp
+            ),
+        onClick = {
+
+        }, colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow),
+        border = ButtonDefaults.outlinedButtonBorder
+    ) {
+        Text(
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+            text = "<- Scale Animation",
+            color = Color.Black
+        )
+    }
+}
+
+@Composable
+fun InfiniteAnimationDisplay(navController: NavController) {
+    Button(
+        modifier = Modifier
+            //.fillMaxSize()
+            .height(60.dp)
+            .padding(
+                start = 20.dp, end = 20.dp
+            ),
+        onClick = {
+
+        }, colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow),
+        border = ButtonDefaults.outlinedButtonBorder
+    ) {
+        Text(
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+            text = "<- Infinite Animation",
+            color = Color.Black
+        )
+    }
+}
+
+@Composable
+fun EnterExitAnimationDisplay(navController: NavController) {
+    Button(
+        modifier = Modifier
+            //.fillMaxSize()
+            .height(60.dp)
+            .padding(
+                start = 20.dp, end = 20.dp
+            ),
+        onClick = {
+
+        }, colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow),
+        border = ButtonDefaults.outlinedButtonBorder
+    ) {
+        Text(
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+            text = "<- Enter-Exit Animation",
+            color = Color.Black
+        )
     }
 }
