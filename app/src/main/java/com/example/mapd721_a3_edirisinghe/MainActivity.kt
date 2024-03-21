@@ -6,9 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,11 +29,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asComposePath
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
@@ -47,6 +54,7 @@ import com.example.mapd721_a3_edirisinghe.ui.theme.MAPD721_A3_EdirisingheTheme
 //https://stackoverflow.com/questions/60247480/color-from-hex-string-in-jetpack-compose
 //https://developer.android.com/reference/kotlin/androidx/compose/animation/core/InfiniteTransition
 //https://developer.android.com/jetpack/compose/graphics/draw/shapes
+//https://developer.android.com/jetpack/compose/animation/value-based#animate-as-state
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -210,27 +218,66 @@ fun TransitionAnimationDisplay(navigationController: NavController, purpleColor:
 
 @Composable
 fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Color) {
-    Button(
-        modifier = Modifier
-            //.fillMaxSize()
-            .height(60.dp)
-            .padding(
-                start = 20.dp, end = 20.dp
-            ),
-        onClick = {
-            navigationController.navigate("animationSelection")
-                  },
-        colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
-        border = ButtonDefaults.outlinedButtonBorder
+    var enabled by remember { mutableStateOf(true) }
 
-    ) {
-        Row {
-            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-            Spacer(modifier = Modifier.width(20.dp))
-            Text(
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                text = "Scale Animation",
-                color = Color.White
+    val alpha: Float by animateFloatAsState(
+        if (enabled) 1f else 0.5f,
+        animationSpec = tween(durationMillis = 1200, easing = LinearEasing),
+        label = "3")
+    Column(modifier = Modifier.fillMaxSize()) {
+        Button(
+            modifier = Modifier
+                //.fillMaxSize()
+                .height(60.dp)
+                .padding(
+                    start = 20.dp, end = 20.dp
+                ),
+            onClick = {
+                navigationController.navigate("animationSelection")
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
+            border = ButtonDefaults.outlinedButtonBorder
+
+        ) {
+            Row {
+                Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                Spacer(modifier = Modifier.width(20.dp))
+                Text(
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+                    text = "Scale Animation",
+                    color = Color.White
+                )
+            }
+        }
+        Spacer(modifier= Modifier.height(10.dp))
+        Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Button(
+                modifier = Modifier
+                    .height(60.dp)
+                    .width(220.dp)
+                    .padding(
+                        start = 5.dp, end = 5.dp
+                    ),
+                onClick = {
+                    enabled = !enabled
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
+                border = ButtonDefaults.outlinedButtonBorder
+            ) {
+
+                Text(
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+                    text = " Scale Animation",
+                    color = Color.White
+                )
+            }
+            Spacer(modifier= Modifier.height(30.dp))
+            Box(
+                Modifier
+                    .height(70.dp)
+                    .width(70.dp)
+                    .graphicsLayer(alpha = alpha)
+                    .background(Color.Red)
             )
         }
     }
