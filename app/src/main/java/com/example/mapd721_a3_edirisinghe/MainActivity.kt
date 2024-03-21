@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -339,6 +340,16 @@ fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: C
             repeatMode = RepeatMode.Reverse
         ), label = "2"
     )
+
+    val sizeMod by infiniteTransition.animateFloat(
+        initialValue = 80F,
+        targetValue = 120F,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ) ,label = "5"
+    )
+
     Column(modifier = Modifier.fillMaxSize()) {
         Button(
             modifier = Modifier
@@ -364,50 +375,62 @@ fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: C
             }
         }
         Spacer(modifier = Modifier.height(50.dp))
-        Box(
-            modifier = Modifier
-                .drawWithCache {
-                    val roundedPolygon = RoundedPolygon(
-                        numVertices = 6,
-                        radius = size.minDimension / 2,
-                        centerX = size.width / 2,
-                        centerY = size.height / 2
-                    )
-                    val roundedPolygonPath = roundedPolygon
-                        .toPath()
-                        .asComposePath()
-                    onDrawBehind {
-                        drawPath(roundedPolygonPath, color = colorShift)
+        Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Box(
+                modifier = Modifier
+                    .drawWithCache {
+                        val roundedPolygon = RoundedPolygon(
+                            numVertices = 6,
+                            radius = size.minDimension / 2,
+                            centerX = size.width / 2,
+                            centerY = size.height / 2
+                        )
+                        val roundedPolygonPath = roundedPolygon
+                            .toPath()
+                            .asComposePath()
+                        onDrawBehind {
+                            drawPath(roundedPolygonPath, color = colorShift)
+                        }
                     }
-                }
-                .fillMaxSize()
-        )
+                    .height(150.dp)
+                    .width(150.dp)
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Box(
+                modifier = Modifier
+                    .height(20.dp * sizeMod)
+                    .width(20.dp * sizeMod)
+                    .background(Color.Blue)
+            )
+        }
     }
 }
 
 @Composable
 fun EnterExitAnimationDisplay(navigationController: NavController, purpleColor: Color) {
-    Button(
-        modifier = Modifier
-            .height(60.dp)
-            .padding(
-                start = 20.dp, end = 20.dp
-            ),
-        onClick = {
-            navigationController.navigate("animationSelection")
-        },
-        colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
-        border = ButtonDefaults.outlinedButtonBorder
+    Column() {
+        Button(
+            modifier = Modifier
+                .height(60.dp)
+                .padding(
+                    start = 20.dp, end = 20.dp
+                ),
+            onClick = {
+                navigationController.navigate("animationSelection")
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
+            border = ButtonDefaults.outlinedButtonBorder
 
-    ) {
-        Row {
-            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-            Spacer(modifier = Modifier.width(20.dp))
-            Text(
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                text = "EnterExit Animation",
-                color = Color.White
-            )
+        ) {
+            Row {
+                Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                Spacer(modifier = Modifier.width(20.dp))
+                Text(
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+                    text = "EnterExit Animation",
+                    color = Color.White
+                )
+            }
         }
     }
 }
