@@ -12,7 +12,9 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,6 +49,7 @@ import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
 import androidx.graphics.shapes.toPath
@@ -306,11 +309,11 @@ fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Colo
                 )
             }
         }
-        Spacer(modifier= Modifier.height(40.dp))
+        Spacer(modifier= Modifier.height(110.dp))
         Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Button(
                 modifier = Modifier
-                    .scale(1/alpha)
+                    .scale(1 / alpha)
                     .height(60.dp)
                     .width(220.dp)
                     .padding(
@@ -330,14 +333,25 @@ fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Colo
                 )
             }
             Spacer(modifier= Modifier.height(30.dp))
-            Box(
-                Modifier
-                    .scale(alpha)
-                    .height(70.dp)
-                    .width(70.dp)
-                    .graphicsLayer(alpha = alpha)
-                    .background(Color.Red)
-            )
+            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Box(
+                    Modifier
+                        .scale(alpha)
+                        .height(70.dp)
+                        .width(70.dp)
+                        .graphicsLayer(alpha = alpha)
+                        .background(Color.Red)
+                )
+                Spacer(modifier= Modifier.width(30.dp))
+                Box(
+                    Modifier
+                        .scale(alpha)
+                        .height(70.dp)
+                        .width(70.dp)
+                        .graphicsLayer(alpha = alpha)
+                        .background(Color.Red)
+                )
+            }
         }
     }
 }
@@ -348,7 +362,7 @@ fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: C
     val image = painterResource(R.drawable.butterfly_image)
 
     val colorShift by infiniteTransition.animateColor(
-        initialValue = Color.Cyan,
+        initialValue = Color.Blue,
         targetValue = Color.Green,
         animationSpec = infiniteRepeatable(
             animation = tween(1000, easing = LinearEasing),
@@ -391,25 +405,29 @@ fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: C
         }
         Spacer(modifier = Modifier.height(50.dp))
         Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Box(
-                modifier = Modifier
-                    .drawWithCache {
-                        val roundedPolygon = RoundedPolygon(
-                            numVertices = 6,
-                            radius = size.minDimension / 2,
-                            centerX = size.width / 2,
-                            centerY = size.height / 2
-                        )
-                        val roundedPolygonPath = roundedPolygon
-                            .toPath()
-                            .asComposePath()
-                        onDrawBehind {
-                            drawPath(roundedPolygonPath, color = colorShift)
+            Row() {
+                Spacer(modifier = Modifier.width(30.dp))
+                Box(
+                    modifier = Modifier
+                        .drawWithCache {
+                            val roundedPolygon = RoundedPolygon(
+                                numVertices = 6,
+                                radius = size.minDimension / 2,
+                                centerX = size.width / 2,
+                                centerY = size.height / 2
+                            )
+                            val roundedPolygonPath = roundedPolygon
+                                .toPath()
+                                .asComposePath()
+                            onDrawBehind {
+                                drawPath(roundedPolygonPath, color = colorShift)
+                            }
                         }
-                    }
-                    .height(150.dp)
-                    .width(150.dp)
-            )
+                        //.offset(x = 230.dp)
+                        .height(150.dp)
+                        .width(150.dp)
+                )
+            }
             Spacer(modifier = Modifier.height(30.dp))
             Box(
                 modifier = Modifier
@@ -480,14 +498,15 @@ fun EnterExitAnimationDisplay(navigationController: NavController, purpleColor: 
         AnimatedVisibility(
             isOffScreen,
             modifier = Modifier
-                .height(200.dp)
-                .width(200.dp),
+//                .height(200.dp)
+//                .width(200.dp),
+                .fillMaxSize(),
 
-            enter = slideInHorizontally(
-                initialOffsetX = {it},
+            enter =  slideIn(
+                initialOffset = { IntOffset(-1000, -1000) },
                 animationSpec = tween(
-                    durationMillis = 2500,
-                    easing = LinearEasing
+                durationMillis = 2500,
+                easing = LinearEasing
                 )
             ),
             exit = slideOutHorizontally(
@@ -511,12 +530,12 @@ fun EnterExitAnimationDisplay(navigationController: NavController, purpleColor: 
                             .toPath()
                             .asComposePath()
                         onDrawBehind {
-                            drawPath(roundedPolygonPath, color = Color.Cyan)
+                            drawPath(roundedPolygonPath, color = Color.Blue)
                         }
                     }
-                    .height(150.dp)
-                    .width(150.dp).height(150.dp)
-                    .width(150.dp)
+//                    .height(250.dp)
+//                    .width(250.dp)
+                    .fillMaxSize()
             )
         }
     }
