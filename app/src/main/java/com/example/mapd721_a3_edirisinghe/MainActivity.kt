@@ -57,6 +57,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mapd721_a3_edirisinghe.ui.theme.MAPD721_A3_EdirisingheTheme
 
+/*
+* Made by Rahul Edirisinghe for MAPD721 Assignment 3.
+* Class notes, and Other references and online resources used to help write code given below.
+* */
+
 //References:
 //https://stackoverflow.com/questions/70142043/how-to-navigate-from-a-screen-to-another-in-jetpack-compose-using-navcontroller
 //https://stackoverflow.com/questions/60247480/color-from-hex-string-in-jetpack-compose
