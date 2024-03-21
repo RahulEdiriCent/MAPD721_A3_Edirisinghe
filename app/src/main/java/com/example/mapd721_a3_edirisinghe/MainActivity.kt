@@ -10,6 +10,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
@@ -39,6 +41,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
@@ -187,6 +190,12 @@ fun AnimationSelection(navigationController: NavController, purpleColor: Color){
 
 @Composable
 fun TransitionAnimationDisplay(navigationController: NavController, purpleColor: Color) {
+    var enabled by remember { mutableStateOf(true) }
+
+    val alpha: Float by animateFloatAsState(
+        if (enabled) 1f else 0.5f,
+        animationSpec = tween(durationMillis = 2000, easing = LinearEasing),
+        label = "4")
 
     Column(modifier = Modifier.fillMaxSize()){
         Button(
@@ -212,6 +221,39 @@ fun TransitionAnimationDisplay(navigationController: NavController, purpleColor:
                     color = Color.White
                 )
             }
+        }
+        Spacer(modifier= Modifier.height(10.dp))
+        Button(
+            modifier = Modifier
+                .height(60.dp)
+                .padding(
+                    start = 20.dp, end = 20.dp
+                ),
+            onClick = {
+                enabled = !enabled
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
+            border = ButtonDefaults.outlinedButtonBorder
+        ) {
+
+            Text(
+                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+                text = "Launch Rocket",
+                color = Color.White
+            )
+        }
+        Spacer(modifier= Modifier.height(30.dp))
+
+        Column(modifier = Modifier.align(Alignment.CenterHorizontally)
+        ){
+            Box(
+                Modifier
+                    .height(110.dp)
+                    .width(110.dp)
+                    .offset(y = 200.dp * alpha)
+                    //.graphicsLayer(alpha = alpha)
+                    .background(Color.Red)
+            )
         }
     }
 }
