@@ -13,8 +13,6 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideIn
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -200,11 +198,11 @@ fun AnimationSelection(navigationController: NavController, purpleColor: Color){
 
 @Composable
 fun TransitionAnimationDisplay(navigationController: NavController, purpleColor: Color) {
-    var enabled by remember { mutableStateOf(true) }
+    var launching by remember { mutableStateOf(true) }
     //val image = painterResource(R.drawable.vector_rocket_launch_in_the_clouds)
 
-    val alpha: Float by animateFloatAsState(
-        if (enabled) 1f else 0.5f,
+    val transitionFactor: Float by animateFloatAsState(
+        if (launching) 1f else 0.5f,
         animationSpec = tween(durationMillis = 2000, easing = LinearEasing),
         label = "4")
 
@@ -236,13 +234,13 @@ fun TransitionAnimationDisplay(navigationController: NavController, purpleColor:
         Spacer(modifier= Modifier.height(10.dp))
         Button(
             modifier = Modifier
-                .offset(y = 70.dp * alpha * alpha)
+                .offset(y = 70.dp * transitionFactor * transitionFactor)
                 .height(60.dp)
                 .padding(
                     start = 20.dp, end = 20.dp
                 ),
             onClick = {
-                enabled = !enabled
+                launching = !launching
             },
             colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
             border = ButtonDefaults.outlinedButtonBorder
@@ -250,7 +248,7 @@ fun TransitionAnimationDisplay(navigationController: NavController, purpleColor:
 
             Text(
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                text = if (enabled) "Launch Rocket" else "Land Rocket",
+                text = if (launching) "Launch Rocket" else "Land Rocket",
                 color = Color.White
             )
         }
@@ -260,9 +258,9 @@ fun TransitionAnimationDisplay(navigationController: NavController, purpleColor:
         ){
             Box(
                 Modifier
-                    .height(135.dp * alpha)
-                    .width(135.dp * alpha)
-                    .offset(y = 500.dp * alpha * alpha * alpha)
+                    .height(135.dp * transitionFactor)
+                    .width(135.dp * transitionFactor)
+                    .offset(y = 500.dp * transitionFactor * transitionFactor * transitionFactor)
                     //.graphicsLayer(alpha = alpha)
                     //.background(Color.Red)
             ){
@@ -277,10 +275,10 @@ fun TransitionAnimationDisplay(navigationController: NavController, purpleColor:
 
 @Composable
 fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Color) {
-    var enabled by remember { mutableStateOf(true) }
+    var activated by remember { mutableStateOf(true) }
 
-    val alpha: Float by animateFloatAsState(
-        if (enabled) 1f else 0.5f,
+    val scaleFactor: Float by animateFloatAsState(
+        if (activated) 1f else 0.5f,
         animationSpec = tween(durationMillis = 1200, easing = LinearEasing),
         label = "3")
 
@@ -313,14 +311,14 @@ fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Colo
         Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Button(
                 modifier = Modifier
-                    .scale(1 / alpha)
+                    .scale(1 / scaleFactor)
                     .height(60.dp)
                     .width(220.dp)
                     .padding(
                         start = 5.dp, end = 5.dp
                     ),
                 onClick = {
-                    enabled = !enabled
+                    activated = !activated
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
                 border = ButtonDefaults.outlinedButtonBorder
@@ -336,19 +334,19 @@ fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Colo
             Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                 Box(
                     Modifier
-                        .scale(alpha)
+                        .scale(scaleFactor)
                         .height(70.dp)
                         .width(70.dp)
-                        .graphicsLayer(alpha = alpha)
+                        .graphicsLayer(alpha = scaleFactor)
                         .background(Color.Red)
                 )
                 Spacer(modifier= Modifier.width(30.dp))
                 Box(
                     Modifier
-                        .scale(alpha)
+                        .scale(scaleFactor)
                         .height(70.dp)
                         .width(70.dp)
-                        .graphicsLayer(alpha = alpha)
+                        .graphicsLayer(alpha = scaleFactor)
                         .background(Color.Red)
                 )
             }
@@ -449,6 +447,11 @@ fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: C
 fun EnterExitAnimationDisplay(navigationController: NavController, purpleColor: Color) {
     var isOffScreen by remember { mutableStateOf(false) }
 
+    val movementFactor: Float by animateFloatAsState(
+        if (isOffScreen) 1f else 2f,
+        animationSpec = tween(durationMillis = 2700, easing = LinearEasing),
+        label = "6")
+
     Column(modifier = Modifier.fillMaxSize()) {
         Button(
             modifier = Modifier
@@ -473,56 +476,59 @@ fun EnterExitAnimationDisplay(navigationController: NavController, purpleColor: 
                 )
             }
         }
-        Spacer(modifier= Modifier.height(40.dp))
-        Button(
-            modifier = Modifier
-                //.fillMaxSize()
-                .height(60.dp)
-                .padding(
-                    end = 20.dp
-                ),
-            onClick = {
-                isOffScreen = !isOffScreen
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
-            border = ButtonDefaults.outlinedButtonBorder
-        ) {
-            Text(
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                text = if (!isOffScreen) "Activate Enter Animation" else "Activate Exit Animation",
-                color = Color.White
-            )
-        }
-        Spacer(modifier= Modifier.height(20.dp))
-        AnimatedVisibility(
-            isOffScreen,
-            modifier = Modifier
-                .fillMaxSize(),
-
-            enter =  slideIn(
-                initialOffset = { IntOffset(-1200, 1200) },
-                animationSpec = tween(
-                durationMillis = 2500,
-                easing = LinearEasing
-                )
-            ),
-            exit = slideOutHorizontally(
-                targetOffsetX = {it},
-                animationSpec = tween(
-                    durationMillis = 2000,
-                    easing = LinearEasing
-                )
-            )
-        ) {
-            Box(
+        Spacer(modifier= Modifier.height(50.dp))
+        //Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Button(
                 modifier = Modifier
-                    .fillMaxSize()
-            ){
-                Image(
-                    painter = painterResource(R.drawable.orange),
-                    contentDescription = null
+                    //.fillMaxSize()
+                    .height(60.dp)
+                    .padding(
+                        start = 40.dp, end = 20.dp
+                    )
+                    .offset(y = 40.dp * movementFactor * movementFactor),
+                onClick = {
+                    isOffScreen = !isOffScreen
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = purpleColor),
+                border = ButtonDefaults.outlinedButtonBorder
+            ) {
+                Text(
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+                    text = if (!isOffScreen) "Activate Enter Animation" else "Activate Exit Animation",
+                    color = Color.White
                 )
             }
-        }
+            Spacer(modifier = Modifier.height(40.dp))
+            AnimatedVisibility(
+                isOffScreen,
+                modifier = Modifier
+                    .fillMaxSize(),
+
+                enter = slideIn(
+                    initialOffset = { IntOffset(-1500, 1500) },
+                    animationSpec = tween(
+                        durationMillis = 2500,
+                        easing = LinearEasing
+                    )
+                ),
+                exit = slideOutHorizontally(
+                    targetOffsetX = { it },
+                    animationSpec = tween(
+                        durationMillis = 2000,
+                        easing = LinearEasing
+                    )
+                )
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.orange),
+                        contentDescription = null
+                    )
+                }
+            }
+        //}
     }
 }
