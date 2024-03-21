@@ -201,7 +201,7 @@ fun AnimationSelection(navigationController: NavController, purpleColor: Color){
 @Composable
 fun TransitionAnimationDisplay(navigationController: NavController, purpleColor: Color) {
     var enabled by remember { mutableStateOf(true) }
-    val image = painterResource(R.drawable.vector_rocket_launch_in_the_clouds)
+    //val image = painterResource(R.drawable.vector_rocket_launch_in_the_clouds)
 
     val alpha: Float by animateFloatAsState(
         if (enabled) 1f else 0.5f,
@@ -267,7 +267,7 @@ fun TransitionAnimationDisplay(navigationController: NavController, purpleColor:
                     //.background(Color.Red)
             ){
                 Image(
-                    painter = image,
+                    painter = painterResource(R.drawable.vector_rocket_launch_in_the_clouds),//image,
                     contentDescription = null
                 )
             }
@@ -359,7 +359,7 @@ fun ScaleAnimationDisplay(navigationController: NavController, purpleColor: Colo
 @Composable
 fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: Color) {
     val infiniteTransition = rememberInfiniteTransition(label = "1")
-    val image = painterResource(R.drawable.butterfly_image)
+    //val image = painterResource(R.drawable.butterfly_image)
 
     val colorShift by infiniteTransition.animateColor(
         initialValue = Color.Blue,
@@ -406,7 +406,7 @@ fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: C
         Spacer(modifier = Modifier.height(50.dp))
         Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Row() {
-                Spacer(modifier = Modifier.width(30.dp))
+                Spacer(modifier = Modifier.width(25.dp))
                 Box(
                     modifier = Modifier
                         .drawWithCache {
@@ -437,7 +437,7 @@ fun InfiniteAnimationDisplay(navigationController: NavController, purpleColor: C
                     //.background(Color.Blue)
             ){
                 Image(
-                    painter = image,
+                    painter =  painterResource(R.drawable.butterfly_image),//image,
                     contentDescription = null
                 )
             }
@@ -473,7 +473,7 @@ fun EnterExitAnimationDisplay(navigationController: NavController, purpleColor: 
                 )
             }
         }
-        Spacer(modifier= Modifier.height(20.dp))
+        Spacer(modifier= Modifier.height(40.dp))
         Button(
             modifier = Modifier
                 //.fillMaxSize()
@@ -481,7 +481,6 @@ fun EnterExitAnimationDisplay(navigationController: NavController, purpleColor: 
                 .padding(
                     end = 20.dp
                 ),
-            //.offset(y = 1.dp * movement),
             onClick = {
                 isOffScreen = !isOffScreen
             },
@@ -490,7 +489,7 @@ fun EnterExitAnimationDisplay(navigationController: NavController, purpleColor: 
         ) {
             Text(
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                text = "Activate Animation",
+                text = if (!isOffScreen) "Activate Enter Animation" else "Activate Exit Animation",
                 color = Color.White
             )
         }
@@ -498,12 +497,10 @@ fun EnterExitAnimationDisplay(navigationController: NavController, purpleColor: 
         AnimatedVisibility(
             isOffScreen,
             modifier = Modifier
-//                .height(200.dp)
-//                .width(200.dp),
                 .fillMaxSize(),
 
             enter =  slideIn(
-                initialOffset = { IntOffset(-1000, -1000) },
+                initialOffset = { IntOffset(-1200, 1200) },
                 animationSpec = tween(
                 durationMillis = 2500,
                 easing = LinearEasing
@@ -519,24 +516,13 @@ fun EnterExitAnimationDisplay(navigationController: NavController, purpleColor: 
         ) {
             Box(
                 modifier = Modifier
-                    .drawWithCache {
-                        val roundedPolygon = RoundedPolygon(
-                            numVertices = 6,
-                            radius = size.minDimension / 2,
-                            centerX = size.width / 2,
-                            centerY = size.height / 2
-                        )
-                        val roundedPolygonPath = roundedPolygon
-                            .toPath()
-                            .asComposePath()
-                        onDrawBehind {
-                            drawPath(roundedPolygonPath, color = Color.Blue)
-                        }
-                    }
-//                    .height(250.dp)
-//                    .width(250.dp)
                     .fillMaxSize()
-            )
+            ){
+                Image(
+                    painter = painterResource(R.drawable.orange),
+                    contentDescription = null
+                )
+            }
         }
     }
 }
